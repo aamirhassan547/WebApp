@@ -21,4 +21,5 @@ python -m pip install --upgrade pip
 python -m pip install --no-cache-dir -r /home/site/wwwroot/requirements.txt
 
 echo "[startup] Starting Gunicorn..."
+# Adjust `webapp:app` if your entrypoint differs (e.g., app.py → app:app, main.py → main:app)
 exec gunicorn webapp:app --bind=0.0.0.0:$PORT --workers=4 --timeout 600
