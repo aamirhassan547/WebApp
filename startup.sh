@@ -17,9 +17,13 @@ echo "[startup] Installing extra libraries for OpenCV..."
 DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends libgl1 libglib2.0-0
 
 echo "[startup] Ensuring Python packages are installed..."
-python -m pip install --upgrade pip
-python -m pip install --no-cache-dir -r /home/site/wwwroot/requirements.txt
+if [ -f "/home/site/wwwroot/requirements.txt" ]; then
+    python -m pip install --upgrade pip
+    python -m pip install --no-cache-dir -r /home/site/wwwroot/requirements.txt
+else
+    echo "[startup] WARNING: requirements.txt not found. Skipping pip install"
+fi
 
 echo "[startup] Starting Gunicorn..."
-# Adjust `webapp:app` if your entrypoint differs (e.g., app.py → app:app, main.py → main:app)
+# Adjust 'webapp:app' if your entrypoint differs (e.g., app.py → app:app, main.py → main:app)
 exec gunicorn webapp:app --bind=0.0.0.0:$PORT --workers=4 --timeout 600
